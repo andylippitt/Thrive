@@ -18,6 +18,9 @@
 
         public override bool CanBeEatenBy(Actor actor)
         {
+            if (actor.Mass <= this.Mass * Game.Configuration.EatMassThreshold)
+                return false;
+
             if (actor is Cell)
             {
                 var cell = actor as Cell;

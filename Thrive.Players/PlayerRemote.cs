@@ -24,5 +24,10 @@
             base.Report();
             PlayerHub.Update(Game);
         }
+
+        protected override void Die()
+        {
+            // don't remove from game so it will keep sending reports
+        }
     }
 }

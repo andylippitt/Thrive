@@ -11,6 +11,7 @@
         public Game Game { get; set; }
         public Point MovementVector { get; set; }
         public ActorCollection Actors { get; set; }
+        
 
         public Player(Game game)
         {
@@ -28,31 +29,48 @@
                 Player = this
             };
             Actors.Add(actor);
-            Game.Actors.Add(actor);
         }
 
         public virtual void Step()
         {
-            if (MovementVector != null)
+            if (Actors.Count == 0)
+                Die();
+            else
             {
-                for (int i = 0; i < Actors.Count; i++)
+                Hunger();
+                
+                if (MovementVector != null)
                 {
-                    var actor = Actors[i];
+                    for (int i = 0; i < Actors.Count; i++)
+                    {
+                        var actor = Actors[i];
 
-                    double speed = Math.Min(Geo.Distance(actor.Position, MovementVector), MaxCellSpeed(actor));
+                        double speed = Math.Min(Geo.Distance(actor.Position, MovementVector), MaxCellSpeed(actor));
 
-                    var current = actor.Position.ToVector();
-                    var target = MovementVector.ToVector();
+                        var current = actor.Position.ToVector();
+                        var target = MovementVector.ToVector();
 
-                    var direction = target - current;
-                    direction = VectorUtil.Normalize(direction);
+                        var direction = target - current;
+                        direction = VectorUtil.Normalize(direction);
 
-                    current += direction * speed;
+                        current += direction * speed;
 
-                    actor.Position.X = (int)current.X;
-                    actor.Position.Y = (int)current.Y;
+                        actor.Position.X = (int)current.X;
+                        actor.Position.Y = (int)current.Y;
+                    }
                 }
             }
+        }
+
+        protected virtual void Hunger()
+        {
+            foreach (var actor in Actors)
+                actor.Mass *= 1 - Game.Configuration.CellHunger;
+        }
+
+        protected virtual void Die()
+        {
+            Game.Players.Remove(this);
         }
 
         private double MaxCellSpeed(Actor cell)
@@ -89,6 +107,32 @@
                 Actors.Add(actor);
                 Game.Actors.Add(actor);
             }
+        }
+
+        protected Point CenterPointOfActors
+        {
+            get
+            {
+                if (Actors.Count > 0)
+                {
+                    var centerOfMyActors = new Point();
+                    foreach (var actor in Actors)
+                    {
+                        centerOfMyActors.X += actor.Position.X;
+                        centerOfMyActors.Y += actor.Position.Y;
+                    }
+                    centerOfMyActors.X /= Actors.Count;
+                    centerOfMyActors.Y /= Actors.Count;
+
+                    return centerOfMyActors;
+                }
+                else return null;
+            }
+        }
+
+        public bool IsDead()
+        {
+            return Actors.Count == 0;
         }
     }
 }

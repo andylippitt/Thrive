@@ -6,8 +6,8 @@
     {
         public Dimensions Dimensions = new Dimensions
         {
-            Width = 800,
-            Height = 600
+            Width = 1024,
+            Height = 768
         };
         public int MinimumSplitMass = 10;
 
@@ -24,7 +24,16 @@
 
         public double CellMaxMass = 20000;
 
+        public double CellHunger = 0.02 / 20;
+
         public int MaxCellsPerPlayer = 16;
 
+        public int FoodMinSize = 20;
+        public int FoodMaxSize = 80;
+
+        public int TotalGameMass = 20000;
+        public int TotalGameMassTolerance = 40;
+
+        public int HunterMin = 6;
     }
 }

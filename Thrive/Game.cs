@@ -15,6 +15,8 @@
         public PlayerCollection Players { get; }
         public Configuration Configuration { get; }
 
+        private DateTime LastReport;
+
         public Game(Configuration configuration)
         {
             Configuration = configuration;
@@ -26,6 +28,8 @@
 
         public void Initialize()
         {
+            LastReport = DateTime.Now;
+
             foreach (var player in Players)
                 player.Initialize();
         }
@@ -35,7 +39,11 @@
             Players.Step();
             Behaviors.Step();
 
-            Players.Report();
+            if (DateTime.Now.Subtract(LastReport).TotalMilliseconds > 40)
+            {
+                LastReport = DateTime.Now;
+                Players.Report();
+            }
         }
 
         public Point RandomPosition()

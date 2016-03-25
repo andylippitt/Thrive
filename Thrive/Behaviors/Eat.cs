@@ -17,8 +17,7 @@
                         var other = Game.Actors[x];
                         if (other.CanBeEatenBy(actor))
                         {
-                            if (actor.Mass > other.Mass * Game.Configuration.EatMassThreshold
-                                && Geo.Distance(actor.Position, other.Position) < ((other.Radius * Game.Configuration.EatDistanceThreshold) + actor.Radius))
+                            if (Geo.Distance(actor.Position, other.Position) < ((other.Radius * Game.Configuration.EatDistanceThreshold) + actor.Radius))
                             {
                                 actor.Mass += other.Mass - (other.Mass * Game.Configuration.EatCost);
                                 actor.Mass = Math.Min(actor.Mass, Game.Configuration.CellMaxMass);

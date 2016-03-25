@@ -56,6 +56,7 @@
     <Compile Include="Behaviors\BehaviorCollection.cs" />
     <Compile Include="Behaviors\Behavior.cs" />
     <Compile Include="Behaviors\Eat.cs" />
+    <Compile Include="Behaviors\PlayerBalance.cs" />
     <Compile Include="Behaviors\PlayerSeparation.cs" />
     <Compile Include="Behaviors\StayInBounds.cs" />
     <Compile Include="Behaviors\FoodBalance.cs" />
@@ -68,6 +69,8 @@
     <Compile Include="Geometry\Point.cs" />
     <Compile Include="Players\PlayerCollection.cs" />
     <Compile Include="Players\Player.cs" />
+    <Compile Include="Players\Hunter.cs" />
+    <Compile Include="Players\Runner.cs" />
     <Compile Include="Players\Wanderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

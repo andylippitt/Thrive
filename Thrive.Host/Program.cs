@@ -21,37 +21,43 @@ namespace Thrive.Host
 
             using (WebApp.Start(options))
             {
-                Console.WriteLine("Server running");
-                
-                var game = new Game(new Configuration
+                try
                 {
-                    Dimensions = new Dimensions
+                    Console.WriteLine("Server running");
+
+                    var game = new Game(new Configuration());
+
+                    game.Players.Add(new PlayerRemote(game));
+
+                    game.Behaviors.Add(new PlayerSeparation());
+                    game.Behaviors.Add(new StayInBounds());
+                    game.Behaviors.Add(new Eat());
+                    game.Behaviors.Add(new FoodBalance());
+                    game.Behaviors.Add(new PlayerBalance());
+
+                    game.Initialize();
+
+                    while (true)
                     {
-                        Height = 600,
-                        Width = 800
+
+                        try
+                        {
+                            //Console.WriteLine("Step");
+                            System.Threading.Thread.Sleep(10);
+
+                            game.Step();
+
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Exception running game: {0}", ex);
+                        }
+
                     }
-                });
-
-                game.Players.Add(new PlayerRemote(game));
-                game.Players.Add(new Wanderer(game));
-                game.Players.Add(new Wanderer(game));
-                game.Players.Add(new Wanderer(game));
-                game.Players.Add(new Wanderer(game));
-                game.Players.Add(new Wanderer(game));
-                game.Players.Add(new Wanderer(game));
-
-                game.Behaviors.Add(new PlayerSeparation());
-                game.Behaviors.Add(new StayInBounds());
-                game.Behaviors.Add(new Eat());
-
-                game.Initialize();
-
-                while (true)
+                }
+                catch (Exception ex)
                 {
-                    //Console.WriteLine("Step");
-                    System.Threading.Thread.Sleep(50);
-
-                    game.Step();
+                    Console.WriteLine("Exception setting up game: {0}", ex);
                 }
             }
         }

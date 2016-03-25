@@ -12,10 +12,10 @@ var graphics;
 function setupDrawing()
 {
     canvas = $('<canvas />')
-        .attr('width', 800)
-        .attr('height', 600)
-        .width(800)
-        .height(600);
+        .attr('width', 1024)
+        .attr('height', 768)
+        .width(1024)
+        .height(768);
     
     $('#viewContainer')
         .append(canvas)
@@ -50,13 +50,13 @@ function setupDrawing()
 
 function drawGrid()
 {
+    graphics.beginPath();
     graphics.lineWidth = 1;
     graphics.strokeStyle = '#cccccc';
     for (var x = 0; x <= canvas.width; x += 40) {
         graphics.moveTo(x, 0);
         graphics.lineTo(x, canvas.width);
     }
-
     for (var y = 0; y <= canvas.height; y += 40) {
         graphics.moveTo(0, y);
         graphics.lineTo(canvas.width, y);
@@ -77,14 +77,29 @@ function animate() {
         var actors = game.Actors;
         for (var i = 0; i < actors.length; i++) {
             var actor = actors[i];
+            var color;
+
+            switch (actor.Color)
+            {
+                case 0: color = 'green'; break;
+                case 1: color = 'red'; break;
+                case 2: color = 'yellow'; break;
+            }
 
             graphics.beginPath();
             graphics.arc(actor.Position.X, actor.Position.Y, actor.Radius, 0, 2 * Math.PI, false);
-            graphics.fillStyle = 'green';
+            graphics.fillStyle = color;
             graphics.fill();
             graphics.lineWidth = 1;
             graphics.strokeStyle = '#003300';
             graphics.stroke();
+
+            if (actor.Note) {
+                graphics.font = "30px Arial";
+                graphics.textAlign = 'center';
+                graphics.fillStyle = 'black';
+                graphics.fillText(actor.Note, actor.Position.X, actor.Position.Y);
+            }
         }
     }
 }
